@@ -1,19 +1,38 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
+Route::group(['prefix' => 'v1', 'as' => 'api.', 'namespace' => 'Api\V1\Admin', 'middleware' => ['auth:sanctum']], function () {
+    // Abilities
+    Route::apiResource('abilities', 'AbilitiesController', ['only' => ['index']]);
 
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
+    // Locales
+    Route::get('locales/languages', 'LocalesController@languages')->name('locales.languages');
+    Route::get('locales/messages', 'LocalesController@messages')->name('locales.messages');
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+    // Dashboard
+    Route::get('dashboard', 'DashboardApiController@index')->name('dashboard');
+
+    // Permissions
+    Route::resource('permissions', 'PermissionsApiController');
+
+    // Roles
+    Route::resource('roles', 'RolesApiController');
+
+    // Users
+    Route::resource('users', 'UsersApiController');
+
+    // Contact Company
+    Route::resource('contact-companies', 'ContactCompanyApiController');
+
+    // Contact Contacts
+    Route::resource('contact-contacts', 'ContactContactsApiController');
+
+    // Brands
+    Route::resource('brands', 'BrandsApiController');
+
+    // Device
+    Route::post('devices/media', 'DeviceApiController@storeMedia')->name('devices.storeMedia');
+    Route::resource('devices', 'DeviceApiController');
+
+    // Device Components
+    Route::resource('device-components', 'DeviceComponentsApiController');
 });
